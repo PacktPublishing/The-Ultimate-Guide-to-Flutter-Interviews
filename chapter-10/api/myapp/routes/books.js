@@ -20,6 +20,7 @@ router.get("/", function (req, res, next) {
 router.post("/", admin.verifyJWT, function (req, res, next) {
   var { book_name } = req.body;
   try {
+    console.log(req)
     var newId =1
     var listBooks = db.get("books");
     console.log(listBooks)
@@ -30,7 +31,7 @@ router.post("/", admin.verifyJWT, function (req, res, next) {
     }
     listBooks["books"].push({ id: newId, name: book_name });
     db.set("books", listBooks);
-    res.json(listBooks["books"]);
+    res.status(201).json(listBooks["books"]);
 
   } catch (error) {
     console.log(error)

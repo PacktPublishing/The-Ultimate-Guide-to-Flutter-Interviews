@@ -23,8 +23,7 @@ class HomeScreen extends StatelessWidget {
               children: [
                 Image.asset(
                   'images/packt-logo.png',
-                  width: 200,
-                  height: 100,
+
                 ),
                 TextFormField(
                     decoration: InputDecoration(
@@ -59,7 +58,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 ElevatedButton(
                     onPressed: () {
-                      ApiService().login({"email":'oto@mail.com','password':'12345'});
+                      ApiService().createBook({"book_name":"teste"});
                     },
                     child: Text('Send'))
               ],

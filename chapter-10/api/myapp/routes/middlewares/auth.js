@@ -9,8 +9,9 @@ const secretKey = "your_secret_key";
       const bearer = bearerHeader.split(" ");
       const bearerToken = bearer[1];
       var decoded = jwt.verify(bearerToken, "test-key", function (err, data) {
-        if (!err) {
+        console.log(bearerToken)
 
+        if (!err) {
             next();
 
         } 
@@ -18,6 +19,7 @@ const secretKey = "your_secret_key";
 
       
     } catch (e) {
+      console.log(e)
         res.status(401).json({
             erro: "You have not permissions",
           });

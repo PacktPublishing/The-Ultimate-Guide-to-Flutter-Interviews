@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:starter/screens/home_screen.dart';
+import 'package:starter/databases/book_database.dart';
+import 'package:starter/screens/list_books.dart';
 
-void main() {
+void main()async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await DatabaseBooks().initDB();
   runApp(const MyApp());
 }
 
@@ -17,7 +20,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HomeScreen(),
+      home: const ListBooksScreen(),
     );
   }
 }
