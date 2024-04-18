@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:starter/networking/api_service.dart';
+import 'package:starter/screens/list_books.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -21,10 +22,7 @@ class HomeScreen extends StatelessWidget {
             width: MediaQuery.of(context).size.width * 0.8,
             child: Column(
               children: [
-                Image.asset(
-                  'images/packt-logo.png',
-
-                ),
+                Image.asset('assets/packt_logo.png'),
                 TextFormField(
                     decoration: InputDecoration(
                   hintText: 'e-mail',
@@ -57,8 +55,18 @@ class HomeScreen extends StatelessWidget {
                   height: 16,
                 ),
                 ElevatedButton(
-                    onPressed: () {
-                      ApiService().createBook({"book_name":"teste"});
+                    onPressed:()async {
+                      try{
+                       await ApiService().login({"email":"oto@mail.com","password":"123456"});
+                       Navigator.of(context).push(
+                         MaterialPageRoute(
+                           builder: (context) => const ListBooksScreen(),
+                         ),
+                       );
+                      }on Exception catch(e){
+                        print(e);
+                        print('Something went wrong');
+                      }
                     },
                     child: Text('Send'))
               ],

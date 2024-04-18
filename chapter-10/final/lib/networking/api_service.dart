@@ -3,18 +3,25 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:starter/databases/book_database.dart';
-import 'package:starter/shared_preferences/token_preferences.dart';
 
 import 'dio_client.dart';
 
 class ApiService {
-  Future<Response> getBooks() async {
-    Response response = await DioClient().dio.get('/books');
+  Future<dynamic> getBooks() async {
 
-    print(' response status code ${response.statusCode}');
-    await DatabaseBooks().insertBook(response.data);
-
-    return response;
+    List dataBooks = await DatabaseBooks().getBooks();
+    if (dataBooks.isEmpty) {
+      Response response = await DioClient().dio.get('/books');
+      List<dynamic> books = response.data['books'];
+      for (var book in books) {
+        await DatabaseBooks().insertBook({'name': book['name']});
+        print(book);
+      }
+      print('from remote');
+      return books;
+    }
+    print('from database');
+    return dataBooks;
   }
 
   Future<Response> createBook(Map<String, dynamic> body) async {
@@ -23,13 +30,14 @@ class ApiService {
     String? token = prefs.getString('token');
     dio.options.headers['authorization'] = "bearer $token";
     Response response = await dio.post('/books', data:body);
-    print(response);
+    List<dynamic> books = response.data['books'];
+    print(books);
+    await DatabaseBooks().insertBook({'name': books.last['name']});
     return response;
   }
 
   Future<Response> login(Map<String, dynamic> body) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-
     Response response = await DioClient().dio.post('/login', data: body);
     await prefs.setString('token', response.data['token']);
     String? token = prefs.getString('token');
